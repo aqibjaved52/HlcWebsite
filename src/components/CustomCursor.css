@@ -1,0 +1,58 @@
+.cursor-trail-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.cursor-glow,
+.cursor-trail-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: transform;
+}
+
+/* Large soft gradient blob trailing behind */
+.cursor-glow {
+  width: 280px;
+  height: 280px;
+  background: radial-gradient(
+    circle,
+    rgba(108, 99, 255, 0.12) 0%,
+    rgba(99, 179, 255, 0.08) 40%,
+    transparent 70%
+  );
+  filter: blur(30px);
+}
+
+/* Trail dots */
+.cursor-trail-dot {
+  --size: calc(10px - (var(--i) * 0.5px));
+  --hue: calc(250 + var(--i) * 10);
+  --alpha: calc(0.6 - (var(--i) / var(--total)) * 0.55);
+
+  width: var(--size);
+  height: var(--size);
+  background: hsla(var(--hue), 80%, 65%, var(--alpha));
+  box-shadow: 0 0 calc(6px + var(--i) * 0.5px)
+    hsla(var(--hue), 80%, 65%, calc(var(--alpha) * 0.5));
+}
+
+/* Visible state */
+.cursor-glow.trail-visible,
+.cursor-trail-dot.trail-visible {
+  opacity: 1;
+}
+
+/* Disable on touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .cursor-trail-container {
+    display: none !important;
+  }
+}
